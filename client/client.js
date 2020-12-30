@@ -5,10 +5,15 @@ const publicVapidKey =
 send = async () => {
   console.log('Registering server worker...')
 
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission()
+    return
+  }
+
   const register =
     await navigator.serviceWorker.register('./worker.js', {
       scope: '/'
-  })
+    })
 
   console.log('Server Worker registered.')
   console.log('Registering Push...')
@@ -33,7 +38,7 @@ send = async () => {
 }
 
 
-if('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
   send().catch(err => console.error(err))
 }
 
